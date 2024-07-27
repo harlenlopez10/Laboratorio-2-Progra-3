@@ -121,60 +121,153 @@ void cframe::on_pushButton_2_clicked()
 void cframe::on_BTNtoBinario_clicked()
 {
 
+    QString letra = ui->valorIngresado->text();
 
-    QChar a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z;
-    a = '97';
-    b = "98";
-    c="99";
-    d = "100";
-    e="101";
-    f="102";
-    g="103";
-    h="104";
-    i="105";
-    j="106";
-    k="107";
-    l="108";
-    m="109";
-    n="110";
-    o="111";
-    p="112";
-    q="113";
-    r="114";
-    s="115";
-    t="116";
-    u="117";
-    v="118";
-    w="119";
-    x="120";
-    y="121";
-    z="122";
-
-
-    QString binaryString;
-    // Número máximo de bits necesario para representar números hasta 122
-    const int numBits = 7;
-
-    // Crear una máscara para el bit más significativo
-    unsigned int mask = 1 << (numBits - 1);
-
-    // Encontrar el primer bit significativo
-    bool leadingZero = true;
-    for (int i = numBits - 1; i >= 0; --i) {
-        if ((number & mask) != 0) {
-            leadingZero = false; // Hemos encontrado un bit significativo
-        }
-        if (!leadingZero) {
-            binaryString += ((number & mask) ? '1' : '0');
-        }
-        mask >>= 1; // Desplazar la máscara un bit a la derecha
+    if (letra.isEmpty()) {
+        ui->rtConversion->setText("Esta vacio");
+        return;
     }
 
-    // En caso de que todos los bits sean cero
-    if (binaryString.empty()) {
-        binaryString = "0";
+    QChar letras[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+    int valor = 97;
+    int numero = 0;
+
+    for (int i = 0; i < 26; i++) {
+        if (letras[i] == letra.at(0)) {
+            numero = valor;
+            break; //Solo para acordarme que aqui es para que termine el ciclo
+        }
+        valor++;
     }
 
-    return binaryString;
+    QString Binario;
+    int Bits = 7;
+    int mascaraBits = 1 << (Bits - 1);
+    bool ceros = true;
+
+    for (int i = Bits - 1; i >= 0; --i) {
+        if ((numero & mascaraBits) != 0) {
+            ceros = false;
+        }
+        if (!ceros) {
+            Binario += ((numero & mascaraBits) ? '1' : '0');
+        }
+        mascaraBits >>= 1;
+    }
+
+    ui->rtConversion->setText(Binario);
+
+}
+
+
+void cframe::on_BTNtoDecimal_clicked()
+{
+    QString letra2 = ui->valorIngresado->text();
+
+    if (letra2.isEmpty()) {
+        ui->rtConversion->setText("Esta vacio");
+        return;
+    }
+
+    QChar letras[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+    int valor = 97;
+    int numero = 0;
+
+    for (int i = 0; i < 26; i++) {
+        if (letras[i] == letra2.at(0)) {
+            numero = valor;
+            break; //Solo para acordarme que aqui es para que termine el ciclo
+        }
+        valor++;
+    }
+
+    ui->rtConversion->setText(QString::number(valor));
+}
+
+
+void cframe::on_BTNtoHexa_clicked()
+{
+
+    QString letra3 = ui->valorIngresado->text();
+
+    QChar letras[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+    int valor = 97;
+    int numero = 0;
+
+    for (int i = 0; i < 26; i++) {
+        if (letras[i] == letra3.at(0)) {
+            numero = valor;
+            break; //Solo para acordarme que aqui es para que termine el ciclo
+        }
+        valor++;
+    }
+
+
+    QChar DigitosHexa[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+    QString Hexadecimal;
+
+    while (valor > 0) {
+        int residuo = valor % 16; // Obtengo el residuo al dividir con 16
+        Hexadecimal = DigitosHexa[residuo] + Hexadecimal; // Convierto a carácter hexadecimal
+        valor /= 16; // Reducir el número dividiendo por 16
+    }
+
+    ui->rtConversion->setText(Hexadecimal);
+}
+
+
+void cframe::on_BTNBinarioLT_clicked()
+{
+
+
+    QString entrada = ui->valorIngresado->text();
+
+    if (entrada.isEmpty() || entrada.length() != 8) {
+        ui->rtConversion->setText("Ingrese un número binario de 8 bits.");
+
+    }
+
+    std::string binario = entrada.toStdString();
+    int decimal = 0;
+
+    for (QChar bit : binario) {
+        decimal = (decimal << 1) | (bit == '1' ? 1 : 0);
+    }
+
+    QChar letra = static_cast<QChar>(decimal);
+
+    ui->rtConversion->setText(QString("Letra: %1").arg(QString(letra)));
+}
+
+
+void cframe::on_BTNDecimalLt_clicked()
+{
+
+    QString valorEntrada = ui->valorIngresado->text();
+    bool verificar;
+    int decimal = valorEntrada.toInt(&verificar);
+
+    if(!verificar || decimal < 0 || decimal > 255){
+        ui->rtConversion->setText("Número decimal no válido. Ingrese un valor entre 0 y 255.");
+    } else {
+        char letra = static_cast<char>(decimal);
+        ui->rtConversion->setText(QString("Letra: %1").arg(QString(letra)));
+    }
+
+}
+
+
+void cframe::on_BTNHexaLt_clicked()
+{
+    QString entrada = ui->valorIngresado->text();
+    bool verificar;
+    int decimal = entrada.toInt(&verificar, 16);
+
+    if (!verificar || decimal < 0 || decimal > 255) {
+        ui->rtConversion->setText("Número hexadecimal no válido. Ingrese un valor correcto.");
+    } else {
+        char letra = static_cast<char>(decimal);
+        ui->rtConversion->setText(QString("Letra: %1").arg(QString(letra)));
+    }
 }
 

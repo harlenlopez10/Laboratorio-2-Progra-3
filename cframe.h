@@ -39,6 +39,16 @@ private slots:
 
     void on_BTNtoBinario_clicked();
 
+    void on_BTNtoDecimal_clicked();
+
+    void on_BTNtoHexa_clicked();
+
+    void on_BTNBinarioLT_clicked();
+
+    void on_BTNDecimalLt_clicked();
+
+    void on_BTNHexaLt_clicked();
+
 private:
     Ui::cframe *ui;
 };
